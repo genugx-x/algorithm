@@ -88,15 +88,34 @@ public class Hash2 {
         solution3번과는 다르게 번호의 길이가 아닌 번호의 시작 번호를 사용
      */
     private static boolean solution4(String[] phone_book) {
+
+        Map<Integer, List<String>> phoneNumberMap = new HashMap<>();
+        for (String phoneNumber: phone_book) {
+            List<String> phoneNumbers = null;
+            // 폰 번호의 길이에 따라 맵 셋팅 ( Integer(폰번호 길이), List<String>(Key값 길이가 동일한 번호 리스트) )
+            if(null == phoneNumberMap.get(phoneNumber.length())) {
+                phoneNumbers = new ArrayList<>();
+                phoneNumbers.add(phoneNumber);
+                phoneNumberMap.put(phoneNumber.length(), phoneNumbers);
+            } else {
+                phoneNumbers = phoneNumberMap.get(phoneNumber.length());
+                phoneNumbers.add(phoneNumber);
+            }
+        }
+        
         HashMap<Integer, ? super HashMap<Integer, ?>> map = new HashMap<>();
         for (String phoneNumber: phone_book) {
             setNumber(map, phoneNumber);
         }
         //System.out.println(map);
 
-        for(String phoneNumber: phone_book) {
-            if(!getNumber(map, phoneNumber)) return false;
-            //System.out.println();
+        for (int i = 1; i <= 20; i++) {
+            List<String> phoneNumbers = phoneNumberMap.get(i);
+            if( phoneNumbers != null) {
+                for (String phoneNumber : phoneNumbers) {
+                    if (!getNumber(map, phoneNumber)) return false;
+                }
+            }
         }
         return true;
     }
@@ -117,7 +136,8 @@ public class Hash2 {
 
     // "1 1 9", -1
     // "1 1 9 5524421"
-    // "97674223",
+    // "97674223";
+    // !! 길이따라 정렬 후 처리해야한다!!!!
     public static boolean getNumber(HashMap<Integer, ? super HashMap<Integer, ?>> phoneBookMap, String phoneNumberToCompare) {
         String startNumber = phoneNumberToCompare.substring(0, 1);
         String nextNumber = phoneNumberToCompare.substring(1);
