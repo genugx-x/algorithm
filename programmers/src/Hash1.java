@@ -4,7 +4,6 @@ public class Hash1 {
     public static void main(String[] args) {
 
     }
-
     // 완주하지 못한 자
     class Solution {
         public String solution(String[] participant, String[] completion) {
