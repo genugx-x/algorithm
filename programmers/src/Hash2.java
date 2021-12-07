@@ -90,8 +90,8 @@ public class Hash2 {
         solution3번과는 다르게 번호의 길이가 아닌 번호의 시작 번호를 사용
      */
     private static boolean solution4(String[] phone_book) {
+        // Map<Integer, HashMap<Integer, ? super HashMap<Integer, ?>>> map = null;
         /*
-        Map<Integer, HashMap<Integer, ? super HashMap<Integer, ?>>> map = null;
         for (String phoneNumber: phone_book) {
             List<String> phoneNumbers = null;
             // 폰 번호의 길이에 따라 맵 셋팅 ( Integer(폰번호 길이), List<String>(Key값 길이가 동일한 번호 리스트) )
@@ -102,31 +102,23 @@ public class Hash2 {
                 phoneNumbers.add(phoneNumber);
             }
         }
-        */
-        Map<Integer, List<String>> phoneNumberMap = new HashMap<>();
-        for (String phoneNumber: phone_book) {
-            List<String> phoneNumbers = null;
-            // 폰 번호의 길이에 따라 맵 셋팅 ( Integer(폰번호 길이), List<String>(Key값 길이가 동일한 번호 리스트) )
-            if(null == phoneNumberMap.get(phoneNumber.length())) {
-                phoneNumbers = new ArrayList<>();
-                phoneNumbers.add(phoneNumber);
-                phoneNumberMap.put(phoneNumber.length(), phoneNumbers);
-            } else {
-                phoneNumbers = phoneNumberMap.get(phoneNumber.length());
-                phoneNumbers.add(phoneNumber);
-            }
-        }
 
-        System.out.println(phoneNumberMap);
+         */
+
+        // System.out.println(phoneNumberMap);
 
         HashMap<Integer, ? super HashMap<Integer, ?>> map = new HashMap<>();
-        for (int i = 1; i <= 20; i++) {
-            List<String> phoneNumbers = phoneNumberMap.get(i);
-            if (phoneNumbers != null) {
-                for (String phoneNumber : phoneNumbers) {
-                    setNumber(map, phoneNumber);
-                }
-            }
+//        for (int i = 1; i <= 20; i++) {
+//            List<String> phoneNumbers = phoneNumberMap.get(i);
+//            if (phoneNumbers != null) {
+//                for (String phoneNumber : phoneNumbers) {
+//                    setNumber(map, phoneNumber);
+//                }
+//            }
+//        }
+
+        for (String phoneNumber: phone_book) {
+            setNumber(map, phoneNumber);
         }
         System.out.println(map);
         return getNumber(map);
@@ -165,12 +157,12 @@ public class Hash2 {
             setNumber(innerPhoneBookMap, nextNumber);
         }
     }
-    
+
+    // "1 1 9 34535235524421"
+    // "1 1 8 6 7235235235" ,
     // "1 1 9 "
     // "1 1 8 34537658
-    // "1 1 8 6 7235235235" ,
     // "1 2 2 412532463547"
-    // "1 1 9 34535235524421"
     // "97674223";
     public static boolean getNumber(HashMap<Integer, ? super HashMap<Integer, ?>> phoneBookMap, String phoneNumberToCompare) {
         String startNumber = (phoneNumberToCompare.length() == 1) ? phoneNumberToCompare : phoneNumberToCompare.substring(0, 1);
