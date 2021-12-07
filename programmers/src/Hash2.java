@@ -3,8 +3,9 @@ import java.util.*;
 public class Hash2 {
 
     public static void main(String[] args) {
+        System.out.println(solution4(new String[]{"12", "13", "14"}));
         System.out.println(solution4(new String[]{"11", "3467568", "7958674", "87659897978", "123", "456", "789", "119", "0089674223", "1195524421"}));
-        //System.out.println(solution4(new String[]{"123", "456", "789"}));
+        System.out.println(solution4(new String[]{"123", "456", "789"}));
     }
     /*
         ["119", "97674223", "1195524421"]	false
@@ -89,7 +90,19 @@ public class Hash2 {
         solution3번과는 다르게 번호의 길이가 아닌 번호의 시작 번호를 사용
      */
     private static boolean solution4(String[] phone_book) {
-
+        /*
+        Map<Integer, HashMap<Integer, ? super HashMap<Integer, ?>>> map = null;
+        for (String phoneNumber: phone_book) {
+            List<String> phoneNumbers = null;
+            // 폰 번호의 길이에 따라 맵 셋팅 ( Integer(폰번호 길이), List<String>(Key값 길이가 동일한 번호 리스트) )
+            if (null == phoneNumberMap.get(phoneNumber.length())) {
+                map = new HashMap<>();
+                phoneNumberMap.put(phoneNumber.length(), map);
+            } else {
+                phoneNumbers.add(phoneNumber);
+            }
+        }
+        */
         Map<Integer, List<String>> phoneNumberMap = new HashMap<>();
         for (String phoneNumber: phone_book) {
             List<String> phoneNumbers = null;
@@ -143,7 +156,8 @@ public class Hash2 {
         if (innerPhoneBookMap == null) {
             phoneBookMap.put(Integer.parseInt(startNumber), map);
             if (nextNumber.length() == 0) {
-                phoneBookMap.put(-1, map);
+                innerPhoneBookMap = (HashMap) phoneBookMap.get(Integer.parseInt(startNumber));
+                innerPhoneBookMap.put(-1, map);
                 return;
             }
             setNumber(map, nextNumber);
@@ -166,7 +180,7 @@ public class Hash2 {
 
         if (nextNumber.length() == 0) { // 자신의 숫자 비교시
             return true;
-        } else if (phoneBookMap.get(-1) != null) { // 현재 검색중인 번호접두어인 경우. 번호 끝을 key값 -1로 구분
+        } else if (map.get(-1) != null) { // 현재 검색중인 번호접두어인 경우. 번호 끝을 key값 -1로 구분
             return false;
         } else if (map == null) { // 현재 startNumber로 검색한 Map의 다음 번호가 없는경우 이미 접두어에 해당 안됨
             return true;
@@ -174,10 +188,15 @@ public class Hash2 {
         return getNumber(map, nextNumber);
     }
 
+    // 1자리 ↓
+    // 2자리
+    // 3자리
+
     // "1 1 9 "
-    // "1 1 8 34537658
-    // "1 1 8 6 7235235235" ,
-    // "1 2 2 412532463547"
+
+    // "1 1 8 3 4 5 37658
+    // "1 1 8 6 7 2 3 5 2 3 5235" ,
+    // "1 2 3 4"
     // "1 1 9 34535235524421"
     // "97674223";
     // 여기까지 정확성 테스트 14번 실패
@@ -187,10 +206,12 @@ public class Hash2 {
         for (int i = 0; i < 10; i++) {
             map = (HashMap<Integer, ? super HashMap<Integer, ?>>) phoneBookMap.get(i);
             if (map != null) {
-                if (map.size() == 0)
+                if (map.get(-1) != null && map.size() == 1)
                     result = true;
-                if (phoneBookMap.get(-1) != null)
-                    result =  false;
+                else if (map.get(-1) != null) {
+                    result = false;
+                    break;
+                }
                 if (!getNumber(map)) {
                     result = false;
                     break;
