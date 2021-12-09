@@ -35,12 +35,24 @@ public class Hash3 {
         ));
          */
 
+        /*
         System.out.println(solution(new String[][]{
                 {"w-a", "A"},
                 {"s-a", "B"}}
                 // {"h-a", "C"}}
                 // {"e-a", "D"}}
         ));
+         */
+
+
+        System.out.println(solution2(new String[][]{
+                {"1", "number"},
+                {"2", "number"},
+                {"a", "alphabet"},
+                {"b", "alphabet"}}
+        ));
+
+        // System.out.println(getFittingCount3(null));
 
     }
 
@@ -91,48 +103,12 @@ public class Hash3 {
 //            }
 //        }
 
-        /*
-        List<String> usedTypesOfCostume = new ArrayList<>(); // 기준으로 사용했던 의상종류 리스트
-        List<String> typesOfCostumeForFitting = null;
-        List<String> typesOfCostumeTemp = new ArrayList<>();
-        typesOfCostumeTemp.addAll(typesOfCostume);
-        for (int i = 0; i < typesOfCostume.size(); ) {
-            // System.out.println("{" + typesOfCostume.get(i) + "}");
-            String standardType = typesOfCostume.get(i); // 기준이 되는 의상종류
-            usedTypesOfCostume.add(standardType);
-            typesOfCostumeForFitting = new ArrayList<>();
-            for (String typeOfCostumeForFitting: typesOfCostume) {
-                if(standardType.equals(typeOfCostumeForFitting)) { // 핏팅에 사용할 타입(typeOfCostumeForFitting)이 기준으로 사용한 의상 종류 리스트에 포함된 경우 제외
-                    continue;
-                }
-                typesOfCostumeForFitting.add(typeOfCostumeForFitting);
-
-            }
-            System.out.println();
-            // fittingCount = getFittingCount(fittingCount, standardType, clothesMap, typesOfCostumeForFitting);
-
-            // 핏팅 조합 수를 구하기
-            // typeOfCostume 기준
-            // typeOfCostumeForFitting 조합용
-            // System.out.println();
-            // System.out.println("clothesMap -> " + clothesMap);
-            // System.out.println("typesOfCostume -> " + typesOfCostume);
-        }
-         */
         System.out.println("=========================");
         System.out.println("피팅 수 구하기");
         int fittingCount = 0;
         fittingCount = getFittingCount2(fittingCount, clothesMap, typesOfCostume);
 
-        // [watch, shoes, headgear, eyewear]
-        // w : a, b, c, d
-        // w s : a, b, c, d
-        // w h
-        // w e
-        // w s e
-        // w h e
-        // w s h e
-        // watch 삭제
+
         return fittingCount;
     }
 
@@ -218,7 +194,7 @@ public class Hash3 {
                 typesToFitting.add(fixedType);
                 for(String nextType: nextTypes)
                     typesToFitting.add(clothesMap.get(nextType));
-                fittingCount += getFittingCount3(fittingCount, typesToFitting);
+                // fittingCount += getFittingCount3(fittingCount, typesToFitting);
                 types.remove(types.get(0));
                 System.out.println();
             }
@@ -240,12 +216,16 @@ public class Hash3 {
         temp.add("2");
         typesToFittingtemp.add(temp);
         int fittingCount = 0;
-        for (int i = 0; i < typesToFittingtemp.size(); i++) {
-            for (int j = i; j < typesToFittingtemp.size(); j++) {
-                fittingCount++;
+        for (int i = 0; i < typesToFittingtemp.size(); ) {
+            if (typesToFittingtemp.size() > 0) {
+                for (int j = 1; j < typesToFittingtemp.size(); j++) {
+                    for (int k = 0; k < typesToFittingtemp.get(j).size(); k++) {
+                    }
+                }
             }
+            System.out.println();
+            typesToFittingtemp.remove(i);
         }
-
         return fittingCount;
     }
 
@@ -259,9 +239,9 @@ public class Hash3 {
     // b, 2
     public static int getFittingCount5(List<List<String>> typesToFitting) {
         for (int i = 0; i < typesToFitting.size(); i++) {
-            typesToFitting.
+            // typesToFitting.
         }
-        return fittingCount;
+        return 0;
     }
 
 
@@ -336,5 +316,36 @@ public class Hash3 {
         return fittingCount;
     }
 
+
+    public static int solution2(String[][] clothes) {
+        List<String> typesOfCostume = new ArrayList<>();
+        List<String> costumeNames = null;
+        HashMap<String, List<String>> clothesMap = new HashMap<>();
+        for (String[] wear: clothes) {
+            String costumeName = wear[0]; // 의상의 이름
+            String typeOfCostume = wear[1]; // 의상의 종류
+            boolean isExistType = false;
+            for (String typeOfCostumeInnerList: typesOfCostume) {
+                if(typeOfCostume.equals(typeOfCostumeInnerList)) {
+                    isExistType = true;
+                }
+            }
+            if (!isExistType) {
+                typesOfCostume.add(typeOfCostume);
+            }
+            costumeNames = clothesMap.get(typeOfCostume);
+            if (costumeNames == null) {
+                costumeNames = new ArrayList<>();
+                clothesMap.put(typeOfCostume, costumeNames);
+            }
+            costumeNames.add(costumeName);
+        }
+        System.out.println(clothesMap);
+
+
+
+
+        return 0;
+    }
 
 }
