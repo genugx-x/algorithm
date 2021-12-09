@@ -318,32 +318,6 @@ public class Hash3 {
 
 
     public static int solution2(String[][] clothes) {
-        List<String> typesOfCostume = new ArrayList<>();
-        List<String> costumeNames = null;
-        HashMap<String, List<String>> clothesMap = new HashMap<>();
-        for (String[] wear: clothes) {
-            String costumeName = wear[0]; // 의상의 이름
-            String typeOfCostume = wear[1]; // 의상의 종류
-            boolean isExistType = false;
-            for (String typeOfCostumeInnerList: typesOfCostume) {
-                if(typeOfCostume.equals(typeOfCostumeInnerList)) {
-                    isExistType = true;
-                }
-            }
-            if (!isExistType) {
-                typesOfCostume.add(typeOfCostume);
-            }
-            costumeNames = clothesMap.get(typeOfCostume);
-            if (costumeNames == null) {
-                costumeNames = new ArrayList<>();
-                clothesMap.put(typeOfCostume, costumeNames);
-            }
-            costumeNames.add(costumeName);
-        }
-        System.out.println(clothesMap);
-
-
-
 
         return 0;
     }
