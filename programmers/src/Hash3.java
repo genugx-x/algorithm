@@ -1,4 +1,4 @@
-import java.sql.Array;
+import java.sql.Types;
 import java.util.*;
 
 // 문제: 위장
@@ -317,9 +317,62 @@ public class Hash3 {
     }
 
 
+    // a, b
+    // 1, 2
+    // !, @
     public static int solution2(String[][] clothes) {
+        Map<String, List<String>> clothesMap = new HashMap<>();
+        List<String> cTypes = new ArrayList<>();
+        for (String[] clothesInner: clothes) {
+            String cname = clothesInner[0];
+            String ctype = clothesInner[1];
+            List<String> cnames = clothesMap.get(ctype);
+            if (cnames == null) {
+                List<String> cnamesToAdd = new ArrayList<>();
+                cnamesToAdd.add(cname);
+                clothesMap.put(ctype, cnamesToAdd);
+                cTypes.add(ctype);
+            } else {
+                cnames.add(cname);
+            }
+
+        }
+        System.out.println(clothesMap);
+        System.out.println();
+
+        // 구조
+        HashMap<String, ? super HashMap<String, ?>> costumesMap = solution2nextStep(cTypes, clothesMap, null);
+        System.out.println(costumesMap);
 
         return 0;
+    }
+
+    public static HashMap<String, ? super HashMap<String, ?>> solution2nextStep(List<String> types, Map<String, List<String>> clothesMap, HashMap<String, ? super HashMap<String, ?>> costumesMap) {
+        // types : List<String>
+        List<String> subTypes = new ArrayList<>();
+        if (types.size() > 1) {
+            for (int i = 1; i < types.size(); i++) {
+                subTypes.add(types.get(i));
+            }
+        }
+        // System.out.println(subTypes);
+        if (costumesMap == null) {
+            costumesMap = new HashMap<>();
+        }
+        for (int i = 0; i < types.size();) {
+            String type = types.get(0);
+            List<String> cNames = clothesMap.get(type);
+            HashMap<String, ? super HashMap<String, ?>> innerCostumesMap = null;
+            for (String cName: cNames) {
+                System.out.print(cName + " " + subTypes);
+                innerCostumesMap = new HashMap<>();
+                costumesMap.put(cName, innerCostumesMap);
+                solution2nextStep(subTypes, clothesMap, innerCostumesMap);
+            }
+            types.remove(type);
+        }
+
+        return costumesMap;
     }
 
 }
