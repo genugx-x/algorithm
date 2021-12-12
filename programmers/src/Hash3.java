@@ -335,17 +335,13 @@ public class Hash3 {
             }
 
         }
-        System.out.println(clothesMap);
-        System.out.println();
+        // HashMap<String, ? super HashMap<String, ?>> costumesMap = setCostumesMap(null, cTypes, clothesMap, null);
 
-        // 구조
-        HashMap<String, ? super HashMap<String, ?>> costumesMap = solution2nextStep(0, null, cTypes, clothesMap, null);
-        // int fittingCount = solution2nextStep(0, null, cTypes, clothesMap, null);
-
-        return getFittingCount(costumesMap);
+        int fittingCount = countFittings(0, null, cTypes, clothesMap);
+        return fittingCount;
     }
 
-    public static HashMap<String, ? super HashMap<String, ?>> solution2nextStep(Integer fittingCount, Integer i, ArrayList<String> types, Map<String, ArrayList<String>> clothesMap, HashMap<String, ? super HashMap<String, ?>> costumesMap) {
+    public static HashMap<String, ? super HashMap<String, ?>> setCostumesMap(Integer i, ArrayList<String> types, Map<String, ArrayList<String>> clothesMap, HashMap<String, ? super HashMap<String, ?>> costumesMap) {
         if (costumesMap == null) {
             costumesMap = new HashMap<>();
         }
@@ -357,16 +353,62 @@ public class Hash3 {
             List<String> cNames = clothesMap.get(type);
             HashMap<String, ? super HashMap<String, ?>> innerCostumesMap = null;
             i++;
-            fittingCount++;
             for (String cName: cNames) {
-                fittingCount++;
                 innerCostumesMap = new HashMap<>();
                 costumesMap.put(cName, innerCostumesMap);
-                solution2nextStep(fittingCount, i, types, clothesMap, innerCostumesMap);
+                setCostumesMap(i, types, clothesMap, innerCostumesMap);
             }
         }
-        // System.out.println(costumesMap);
         return costumesMap;
+    }
+
+
+    public static int countFitting(Integer i, ArrayList<String> types, Map<String, ArrayList<String>> clothesMap) {
+        int fittingCount = 0;
+        if( i == null) {
+            i = 0;
+        }
+        for (; i < types.size();) {
+            String type = types.get(i);
+            List<String> cNames = clothesMap.get(type);
+            i++;
+            for (String cName: cNames) {
+                fittingCount++;
+                fittingCount += countFitting(i, types, clothesMap);
+            }
+        }
+        return fittingCount;
+    }
+
+    public static int countFittings(int fittingCount, Integer i, ArrayList<String> types, Map<String, ArrayList<String>> clothesMap) {
+        // int fittingCount = 0;
+        if( i == null) {
+            i = 0;
+        }
+        for (i = 0; i < types.size(); i++) {
+            List<String> cNames = clothesMap.get(types.get(i));
+            fittingCount += cNames.size();
+            fittingCount +=
+        }
+        return fittingCount;
+    }
+
+    public static int countFitting(Integer i, ArrayList<String> types, String[][] clothes) {
+        int fittingCount = 0;
+        if( i == null) {
+            i = 0;
+        }
+        for (; i < types.size();) {
+            String type = types.get(i);
+            i++;
+            for(String[] aClothes: clothes) {
+                if (aClothes[1].equals(type)) {
+                    fittingCount++;
+                    fittingCount += countFitting(i, types, clothes);
+                }
+            }
+        }
+        return fittingCount;
     }
 
     public static int getFittingCount(HashMap<String, ? super HashMap<String, ?>> costumesMap) {
