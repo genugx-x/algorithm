@@ -1,3 +1,5 @@
+package Hash;
+
 import java.util.*;
 
 // 문제: 위장
