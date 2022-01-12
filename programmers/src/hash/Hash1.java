@@ -1,4 +1,4 @@
-package Hash;
+package hash;
 
 import java.util.Arrays;
 
