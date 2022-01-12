@@ -13,6 +13,8 @@ public class StackAndQueue1_2 {
         System.out.println(Arrays.toString(solution(new int[]{99, 99, 99, 99, 99, 99}, new int[]{1, 1, 1, 1, 1, 1})));
         System.out.println();
         System.out.println(Arrays.toString(solution(new int[]{99, 98, 87, 15, 75, 12}, new int[]{1,2, 10, 100, 26, 100})));
+        System.out.println();
+        System.out.println(Arrays.toString(solution(new int[]{98, 99, 99, 98, 99, 99}, new int[]{1, 1, 1, 1, 1, 1})));
     }
 
     public static int[] solution(int[] progresses, int[] speeds) {
@@ -28,10 +30,9 @@ public class StackAndQueue1_2 {
             int progress = progresses[i];
             double speed = speeds[i];
             double tempDays = (100 - progress) / speed;
-            System.out.println(tempDays);
+            // System.out.println(tempDays);
             progressCompleteDays.add((int) Math.ceil(tempDays));
         }
-        // System.out.println(progressCompleteDays.toString());
         return progressCompleteDays;
     }
 
