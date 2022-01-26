@@ -24,8 +24,24 @@ public class StackAndQueue2 {
         for (int priority : priorities) {
             queue.add(priority);
         }
+        int completeCount = 0;
         while (true) {
+            boolean flag = true;
             int priority = queue.poll();
+            for (Integer  p : queue) {
+                if (p > priority) {
+                    queue.add(priority);
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                completeCount++;
+                if (priority == "나의 출력 인쇄물") {
+                    answer = completeCount;
+                    break;
+                }
+            }
 
         }
 
