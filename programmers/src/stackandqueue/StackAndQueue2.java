@@ -43,7 +43,6 @@ public class StackAndQueue2 {
             System.out.println(order.getPriority() + " " + order.getFlag());
         });
 
-
         int completeCount = 0;
         while (true) {
             boolean flag = true;
