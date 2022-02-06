@@ -1,11 +1,17 @@
 package stackandqueue;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
 
 // 다리를 지나는 트럭
 public class StackAndQueue3 {
     public static void main(String[] args) {
+        // 2	10	[7,4,5,6]
+        int answer = solution(2, 10, new int[]{7,4,5,6}); // answer = 8;
+        //int answer = solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10}); // answer = 8;
+        System.out.println(answer);
     }
 
     public static int solution(int bridge_length, int weight, int[] truck_weights) {
@@ -43,8 +49,44 @@ public class StackAndQueue3 {
         //          >> 대기해야 한다면 +n [다리의 길이]
         //      > 위 *조건대로 시작 트럭의 고정 소요시간* + 다음 트럭의 이동 조건에 따라 소요되는 누적 초
 
+        // 다리의 길이 : 2, 다리가 버틸 수 있는 최대 무게: 10, 다리를 건널 트럭: [7,4,5,6]
+        Queue<Truck> truckQ = new LinkedList<>();
+        for (int truck_weight : truck_weights) {
+            truckQ.add(new Truck(truck_weight, bridge_length));
+        }
 
-
+        ArrayBlockingQueue<Truck> bridgeQ = new ArrayBlockingQueue<>(bridge_length);
+        while (true) {
+            bridgeQ.forEach( t -> {
+                System.out.println(bridgeQ.size() + " " + t.weight + " " + t.second);
+            });
+            bridgeQ.forEach( t -> {
+                bridgeQ.poll();
+                if (--t.second >= 0) bridgeQ.add(t);
+            });
+            // 다리를 건너고 있는 트럭의 총 무게
+            int trucksWeightOnBridge = bridgeQ.stream()
+                    .mapToInt(t -> t.weight)
+                    .sum();
+            System.out.println("소요시간 ==> " + answer + ", 다리 건너는 트럭 총 무게: " + trucksWeightOnBridge);
+            if (truckQ.peek() != null) {
+                if ((weight - trucksWeightOnBridge) >= truckQ.peek().weight) {
+                    bridgeQ.add(truckQ.poll());
+                }
+            }
+            if (bridgeQ.size() == 0) break;
+            answer++;
+        }
         return answer; // 최단시간
+    }
+
+    static class Truck {
+        Integer weight;
+        Integer second;
+
+        Truck(int weight, Integer second) {
+            this.weight = weight;
+            this.second = second;
+        }
     }
 }
