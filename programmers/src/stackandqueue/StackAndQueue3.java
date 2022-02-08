@@ -10,8 +10,9 @@ public class StackAndQueue3 {
     public static void main(String[] args) {
         // 2	10	[7,4,5,6]
         int answer = solution(2, 10, new int[]{7,4,5,6}); // answer = 8;
-        //int answer = solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10}); // answer = 8;
         System.out.println(answer);
+        // int answer2 = solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10}); // answer = 8;
+        // System.out.println(answer2);
     }
 
     public static int solution(int bridge_length, int weight, int[] truck_weights) {
@@ -58,24 +59,37 @@ public class StackAndQueue3 {
         ArrayBlockingQueue<Truck> bridgeQ = new ArrayBlockingQueue<>(bridge_length);
         while (true) {
             bridgeQ.forEach( t -> {
-                System.out.println(bridgeQ.size() + " " + t.weight + " " + t.second);
+                System.out.print("[" + t.weight + "(무게), " + t.second + "(sec)] ");
             });
+            System.out.println();
+            // 다리를 건너고 있는 트럭의 총 무게
             bridgeQ.forEach( t -> {
                 bridgeQ.poll();
                 if (--t.second >= 0) bridgeQ.add(t);
             });
-            // 다리를 건너고 있는 트럭의 총 무게
             int trucksWeightOnBridge = bridgeQ.stream()
                     .mapToInt(t -> t.weight)
                     .sum();
-            System.out.println("소요시간 ==> " + answer + ", 다리 건너는 트럭 총 무게: " + trucksWeightOnBridge);
+            if (trucksWeightOnBridge > 0) {
+                answer++;
+            } else {
+                if (!bridgeQ.isEmpty()) {
+                    answer++;
+                } else {
+                    if (truckQ.peek() != null) {
+                        answer++;
+                    }
+                }
+            }
+            System.out.println("소요시간 ==> " + answer + "(sec), 다리 건너는 트럭 총 무게: " + trucksWeightOnBridge);
             if (truckQ.peek() != null) {
                 if ((weight - trucksWeightOnBridge) >= truckQ.peek().weight) {
                     bridgeQ.add(truckQ.poll());
                 }
+            } else {
+                if (bridgeQ.isEmpty()) break;
             }
-            if (bridgeQ.size() == 0) break;
-            answer++;
+            System.out.println();
         }
         return answer; // 최단시간
     }
