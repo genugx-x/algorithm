@@ -1,6 +1,5 @@
 package stackandqueue;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -11,8 +10,8 @@ public class StackAndQueue3 {
         // 2	10	[7,4,5,6]
         int answer = solution(2, 10, new int[]{7,4,5,6}); // answer = 8;
         System.out.println(answer);
-        // int answer2 = solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10}); // answer = 8;
-        // System.out.println(answer2);
+        int answer2 = solution(100, 100, new int[]{10,10,10,10,10,10,10,10,10,10}); // answer = 8;
+        System.out.println(answer2);
     }
 
     public static int solution(int bridge_length, int weight, int[] truck_weights) {
@@ -53,45 +52,37 @@ public class StackAndQueue3 {
         // 다리의 길이 : 2, 다리가 버틸 수 있는 최대 무게: 10, 다리를 건널 트럭: [7,4,5,6]
         Queue<Truck> truckQ = new LinkedList<>();
         for (int truck_weight : truck_weights) {
-            truckQ.add(new Truck(truck_weight, bridge_length));
+            truckQ.add(new Truck(truck_weight, bridge_length)); // Truck 생성자 (무게, 다리를 통과하기 까지의 소요시간)
         }
-
         ArrayBlockingQueue<Truck> bridgeQ = new ArrayBlockingQueue<>(bridge_length);
+        boolean startFlag = false;
+        int trucksWeightOnBridge = 0;
         while (true) {
-            bridgeQ.forEach( t -> {
-                System.out.print("[" + t.weight + "(무게), " + t.second + "(sec)] ");
-            });
-            System.out.println();
-            // 다리를 건너고 있는 트럭의 총 무게
+            // 다리를 통과한 트럭을 체크한 후 제외
             bridgeQ.forEach( t -> {
                 bridgeQ.poll();
-                if (--t.second >= 0) bridgeQ.add(t);
+                if (--t.second > 0)
+                    bridgeQ.add(t);
             });
-            int trucksWeightOnBridge = bridgeQ.stream()
-                    .mapToInt(t -> t.weight)
-                    .sum();
-            if (trucksWeightOnBridge > 0) {
-                answer++;
-            } else {
-                if (!bridgeQ.isEmpty()) {
-                    answer++;
-                } else {
-                    if (truckQ.peek() != null) {
-                        answer++;
-                    }
-                }
-            }
-            System.out.println("소요시간 ==> " + answer + "(sec), 다리 건너는 트럭 총 무게: " + trucksWeightOnBridge);
-            if (truckQ.peek() != null) {
+            if (!truckQ.isEmpty()) {
+                // 다리 건너고 있는 트럭의 총 무게 계산
+                trucksWeightOnBridge = bridgeQ.stream()
+                        .mapToInt(t -> t.weight)
+                        .sum();
+                // (다리 하중 - 다리위 트럭의 총 무게) >= 대기중인 트럭 무게
                 if ((weight - trucksWeightOnBridge) >= truckQ.peek().weight) {
                     bridgeQ.add(truckQ.poll());
                 }
-            } else {
-                if (bridgeQ.isEmpty()) break;
+                startFlag = true; // 측정 시작 flag
             }
-            System.out.println();
+            // 시간 관련 측정
+            if (startFlag) {
+                answer++;
+                if (bridgeQ.isEmpty()) // 다리 위 트럭이 더이상 없다면 while 벗어나기
+                    break;
+            }
         }
-        return answer; // 최단시간
+        return answer;
     }
 
     static class Truck {
