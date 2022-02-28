@@ -15,43 +15,23 @@ public class TargetNumber {
         for (int number : numbers) {
             queue.add(number);
         }
-
-        answer = calc(queue, target, count);
-
-
+        answer = calc(queue, target);
         return answer;
     }
 
-    public static int calc(Queue<Integer> q, int t, int c) {
+    public static int calc(Queue<Integer> q, int t) {
         int result = 0;
         Integer number = null;
-        if (!q.isEmpty().size() > 0) {
+        if (!q.isEmpty()) {
+            Queue<Integer> plusQ = new LinkedList<Integer>();
+            Queue<Integer> minusQ = new LinkedList<Integer>();
+            plusQ.addAll(q);
+            minusQ.addAll(q);
             number = q.poll();
-            if (c > 0) {
-                for (int i = 0; i < 2; i++) {
-                    if (i == 0) {
-                        // +
-                        number *= 1;
-                    } else {
-                        // -
-                        number *= -1;
-                    }
-                    result += calc(q, t + number, --c);
-                }
-            } else {
-                for (int i = 0; i < 2; i++) {
-                    if (i == 0) {
-                        // +
-                        number *= 1;
-                    } else {
-                        // -
-                        number *= -1;
-                    }
-                    if (t + number == 0) {
-                        result = 1;
-                    }
-                }
-            }
+            result += calc(plusQ, t + (number));
+            result += calc(minusQ, t + (number * -1));
+        } else {
+            if (t + number == 0) result = 1;
         }
         return result;
     }
