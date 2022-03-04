@@ -1,38 +1,36 @@
 package dfsbfs;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TargetNumber {
     public static void main(String[] args) {
         int answer = solution(new int[]{1,1,1,1,1}, 3); // answer = 5
+        System.out.println("1.answer : " + answer);
+
+        answer = solution(new int[]{4, 1, 2, 1}, 4); // answer = 2
+        System.out.println("2.answer : " + answer);
+
     }
 
     public static int solution(int[] numbers, int target) {
         int answer = 0;
-        int count = numbers.length-1;
-        Queue<Integer> queue = new LinkedList<>();
-        for (int number : numbers) {
-            queue.add(number);
-        }
-        answer = calc(queue, target);
+        answer = calc(numbers, target, 0);
         return answer;
     }
 
-    public static int calc(Queue<Integer> q, int t) {
+    public static int calc(int[] numbers, int target, int index) {
         int result = 0;
-        Integer number = null;
-        if (!q.isEmpty()) {
-            Queue<Integer> plusQ = new LinkedList<Integer>();
-            Queue<Integer> minusQ = new LinkedList<Integer>();
-            plusQ.addAll(q);
-            minusQ.addAll(q);
-            number = q.poll();
-            result += calc(plusQ, t + (number));
-            result += calc(minusQ, t + (number * -1));
+        int number = 0;
+        if (index < numbers.length) {
+            number = numbers[index];
+            index++;
+            result += calc(numbers, target + (number), index);
+            result += calc(numbers, target + (number * -1), index);
         } else {
-            if (t + number == 0) result = 1;
+            if (target + number == 0) result = 1;
         }
         return result;
     }
+
 }
