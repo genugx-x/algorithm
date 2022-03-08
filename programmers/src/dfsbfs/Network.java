@@ -30,22 +30,20 @@ public class Network {
 
     // j -> t
     static boolean isOneNetwork(int[][] computers, int j, int i, int t) {
-        boolean isOneNetWork = false;
-        if (j < i) { // 0 < 1
-            if (computers[j][i] == 1) {
-                if (computers[i][j] == 1) {
-                    return true;
-                }
-            }
-            for (int k = 0; k < computers[j].length; k++) {
-                if (k != i && k != t && k != j) {
-                    if (computers[j][k] == 1 && computers[k][j] == 1) {
-                        isOneNetWork = isOneNetwork(computers, k, i, t);
+        boolean flag = false;
+        for (; j < computers[t].length; j++) {
+            if ( j != i && j < t) {
+                if (computers[t][j] == 1 && computers[j][t] == 1) {
+                    if (computers[j][i] == 1 && computers[i][j] == 1) {
+                        flag = true;
                     }
                 }
             }
         }
-        return isOneNetWork;
+        if (!flag) {
+            flag = isOneNetwork(computers, j, i, t);
+        }
+        return flag;
     }
 
 //    static boolean isOneNetwork(int[][] computers, int j, int i) {
