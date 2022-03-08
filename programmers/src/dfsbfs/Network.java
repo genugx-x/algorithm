@@ -4,10 +4,10 @@ package dfsbfs;
 public class Network {
 
     public static void main(String[] args) {
-//        System.out.println("1.answer = " + solution(3, new int[][] {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}})); // answer = 2
+        System.out.println("1.answer = " + solution(3, new int[][] {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}})); // answer = 2
         System.out.println("2.answer = " + solution(3, new int[][] {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}})); // answer = 1
-//        System.out.println("3.answer = " + solution(4, new int[][] {{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 1, 1}, {0, 0, 1, 1}})); // answer = 2
-//        System.out.println("4.answer = " + solution(3, new int[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}})); // answer = 1
+        System.out.println("3.answer = " + solution(4, new int[][] {{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 1, 1}, {0, 0, 1, 1}})); // answer = 2
+        System.out.println("4.answer = " + solution(3, new int[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}})); // answer = 1
     }
 
 
@@ -19,7 +19,7 @@ public class Network {
         for (int i = 0; i < n; i++) {
             for (int t = i+1; t < n; t++) {
                 if (computers[i][t] == 1 && computers[t][i] == 1) { // 연결됨
-                    boolean isAlreadyOneNetwork = isOneNetwork(computers, 0, i, t);
+                    boolean isAlreadyOneNetwork = isOneNetwork(computers, t, i, t);
                     if (!isAlreadyOneNetwork)
                         answer--;
                 }
@@ -29,19 +29,18 @@ public class Network {
     }
 
     // j -> t
-    static boolean isOneNetwork(int[][] computers, int j, int i, int t) {
+    static boolean isOneNetwork(int[][] computers, int p, int i, int t) {
         boolean flag = false;
-        for (; j < computers[t].length; j++) {
+        for (int j = 0; j < computers[p].length; j++) {
             if ( j != i && j < t) {
-                if (computers[t][j] == 1 && computers[j][t] == 1) {
+                if (computers[p][j] == 1 && computers[j][p] == 1) {
                     if (computers[j][i] == 1 && computers[i][j] == 1) {
                         flag = true;
+                    } else {
+                        flag = isOneNetwork(computers, j, i, t);
                     }
                 }
             }
-        }
-        if (!flag) {
-            flag = isOneNetwork(computers, j, i, t);
         }
         return flag;
     }
