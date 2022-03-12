@@ -8,13 +8,13 @@ import java.util.stream.Collectors;
 public class Network {
 
     public static void main(String[] args) {
-        System.out.println("1.answer = " + solution2(3, new int[][] {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}})); // answer = 2
+        System.out.println("1.answer = " + solution3(3, new int[][] {{1, 1, 0}, {1, 1, 0}, {0, 0, 1}})); // answer = 2
         System.out.println();
-        System.out.println("2.answer = " + solution2(3, new int[][] {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}})); // answer = 1
+        System.out.println("2.answer = " + solution3(3, new int[][] {{1, 1, 0}, {1, 1, 1}, {0, 1, 1}})); // answer = 1
         System.out.println();
-        System.out.println("3.answer = " + solution2(4, new int[][] {{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 1, 1}, {0, 0, 1, 1}})); // answer = 2
+        System.out.println("3.answer = " + solution3(4, new int[][] {{1, 1, 0, 0}, {1, 1, 0, 0}, {0, 0, 1, 1}, {0, 0, 1, 1}})); // answer = 2
         System.out.println();
-        System.out.println("4.answer = " + solution2(3, new int[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}})); // answer = 1
+        System.out.println("4.answer = " + solution3(3, new int[][] {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}})); // answer = 1
     }
 
 
@@ -93,4 +93,100 @@ public class Network {
 //        }
 //        return false;
 //    }
+    
+/*****************************************************************************************************/
+
+    public static int solution3(int n, int[][] computers) {
+        List<List<Integer>> networks = new ArrayList<>(); // networks.size()가 답이 된다.
+        for (int current = 0; current < n; current++) {
+            List<Integer> network = new ArrayList<>();
+            network.add(current);
+            for (int target = current; target < n; target++) {
+                if (target != current) {
+                    if (computers[current][target] == 1 && computers[target][current] == 1) { // 연결된 상태 확인
+                        network.add(target);
+                        // updateNetwork(networks, i, t);
+                    }
+                }
+            }
+            networks.add(network);
+        }
+        print(networks);
+        updateNetwork(networks);
+        System.out.println();
+        System.out.println("-----After update-----");
+        print(networks);
+        return networks.size();
+    }
+
+    public static void print(List<List<Integer>> networks) {
+        int count = 1;
+        for (List<Integer> network : networks) {
+            System.out.print(count++ + ". network list: ");
+            for (Integer computer : network) {
+                System.out.print(computer + ", ");
+            }
+            System.out.println();
+        }
+    }
+
+    // i와 t는 하나의 네트워크
+    // networks 목록에서 i와 t의 네트워크 존재 여부를 확인
+    public static void updateNetwork(List<List<Integer>> networks, int i, int t) {
+        // i, t 번호가 각기 다른 network 리스트에 있는 경우 하나의 네트워크로 묶어주기
+        Integer networkIndexOfCurrent = null;
+        Integer networkIndexOfTarget = null;
+        boolean flag = false;
+        for (int n = 0; n < networks.size(); n++) {
+            List<Integer> network = networks.get(n);
+            if (network.contains(i) && network.contains(t)) {
+                flag = true;
+                break;
+            } // networks에 추가 작업 하지 않아도 됨.
+            if (network.contains(i))
+                networkIndexOfCurrent = n;
+            if (network.contains(t))
+                networkIndexOfTarget = n;
+        }
+
+        // i와 t가 네트워크 목록에 모두 없으면 새 네트워크 목록 생성
+        // i와 t가 같은 네트워크 상에 존재하면 아무 작업 없음
+        // i와 t가 다른 네트워크 상에 존재하면 동일 네트워크 목록으로 추가 후 한쪽 네트워크는 제거
+        // i와 t 중 하나가 네트워크 목록에 없다면 네트워크에 존재하는 곳에 없는 인덱스를 추가
+        if (!flag) { // 동일 네트워크에 있지 않은 상태.
+            if (networkIndexOfCurrent == null) {
+                if (networkIndexOfTarget == null) { // 네트워크에 모두 없는 경우
+                    List<Integer> network = new ArrayList<>();
+                    network.add(i);
+                    network.add(t);
+                    networks.add(network);
+                } else {
+                    networks.get(networkIndexOfTarget).add(t);
+                }
+            } else {
+                if (networkIndexOfTarget == null) {
+                    networks.get(networkIndexOfCurrent).add(i);
+                } else {
+                        for (Integer target : networks.get(networkIndexOfTarget)) {
+                            networks.get(networkIndexOfCurrent).add(target);
+                        }
+                        networks.remove(networkIndexOfTarget);
+                }
+            }
+        }
+    }
+
+    public static void updateNetwork(List<List<Integer>> networks) {
+        List<List<Integer>> updatedNetworks = new ArrayList<>();
+
+        while(true) {
+            for (int i = 0; i < networks.size(); i++) {
+                updatedNetworks.add(networks.get(i));
+                for (List<Integer> updatedNetwork : updatedNetworks) {
+
+                }
+            }
+        }
+    }
+    
 }
